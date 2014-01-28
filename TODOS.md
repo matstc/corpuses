@@ -1,0 +1,11 @@
+- install a database 
+- try to use coffee script for your code
+- create a model for corpuses
+- create a form to save a corpus
+- create a background job to create the corpus
+- update UI with corpus information
+- deploy to heroku
+- use bootstrap on UI
+- make UI responsive
+- add color to UI
+- try to use haml
