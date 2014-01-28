@@ -4,13 +4,23 @@
   </head>
   <body>
     <h1>Welcome to <%= title %></h1>
-    <p>UA is <%= ua %></p>
+
     <form method="post" action="/corpus">
-      <textarea name="text">
-      </textarea>
-      <button type="submit">
-        Create Corpus!
-      </button>
+      <div>
+        <label>Title</label>
+        <input type="text" name="title" />
+      </div>
+
+      <div>
+        <label>Text</label>
+        <textarea name="text"></textarea>
+      </div>
+
+      <div>
+        <button type="submit">
+          Create Corpus!
+        </button>
+      </div>
     </form>
   </body>
 </html>

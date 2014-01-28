@@ -1,7 +1,5 @@
-- create a model for corpuses
-- display the corpus info
 - try to use coffee script for your code
-- create a background job to create the corpus
+- create a background job to create the corpus (w/ node?)
 - update UI with corpus information
 - deploy to heroku
 - use bootstrap on UI
