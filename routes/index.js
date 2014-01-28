@@ -16,3 +16,7 @@ exports.index = function(req, res){
     res.render('index', { title: 'Express', ua: reply });
   });
 };
+
+exports.create = function(req, res){
+  res.render('json', {content: {result:true}})
+};

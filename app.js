@@ -30,6 +30,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
+app.post('/corpus', routes.create);
 
 /* ---------------- */
 http.createServer(app).listen(app.get('port'), function(){

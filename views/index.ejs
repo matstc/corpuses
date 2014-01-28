@@ -3,7 +3,14 @@
     <link href="/stylesheets/style.css" rel="stylesheet">
   </head>
   <body>
-  <h1>Welcome to <%= title %></h1>
-  <p>UA is <%= ua %></p>
+    <h1>Welcome to <%= title %></h1>
+    <p>UA is <%= ua %></p>
+    <form method="post" action="/corpus">
+      <textarea name="text">
+      </textarea>
+      <button type="submit">
+        Create Corpus!
+      </button>
+    </form>
   </body>
 </html>
