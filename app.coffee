@@ -28,6 +28,7 @@ app.use(express.errorHandler()) if 'development' == app.get('env')
 
 app.get('/', routes.index)
 app.post('/corpus', routes.create)
+app.get('/corpus', routes.list)
 app.get('/corpus/:id', routes.show)
 
 http.createServer(app).listen(app.get('port'), ->

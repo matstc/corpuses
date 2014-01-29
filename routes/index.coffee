@@ -1,8 +1,21 @@
 redis = require "redis" 
+_ = require "underscore"
 
 exports.index = (req, res) ->
   res.render('index', { title: 'Corpuses'})
 
+exports.list = (req, res) ->
+  db = redis.createClient()
+  db.on "error", console.log
+   
+  db.hkeys 'corp', (err, reply) ->
+    multi = db.multi()
+
+    for id in _.shuffle(reply)[0..5]
+      multi.hget 'corp', id, () ->
+
+    multi.exec (err, reply) ->
+      res.render('json', {content: reply.map (record) -> JSON.parse record, err: err})
 
 exports.create = (req, res) ->
   text = req.body.text
@@ -19,23 +32,20 @@ exports.create = (req, res) ->
 
   tuples = tuples.filter((tuple) -> tuple[1] > 1).sort((one, other) -> one[1] - other[1]).reverse()
 
-  db = redis.createClient().on "error", (err) ->
-    console.log("Error " + err)
+  db = redis.createClient()
+  db.on "error", console.log
 
   id = Math.floor(Math.random(1) * 10000000)
 
-  db.set(id, JSON.stringify({id: id, title: title, rankings: tuples}), redis.print)
+  db.hset("corp", id, JSON.stringify({id: id, title: title, rankings: tuples, text: text}), redis.print)
 
   res.render('json', {content: {id: id}})
-
 
 exports.show = (req, res) ->
   id = req.param("id")
 
   db = redis.createClient()
-
-  db.on "error", (err) ->
-    console.log("Error " + err)
+  db.on "error", console.log
    
-  db.get id, (err, reply) ->
+  db.hget "corp", id, (err, reply) ->
     res.render('json', {content: JSON.parse(reply), err: err})

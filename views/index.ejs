@@ -52,6 +52,14 @@
           </button>
         </div>
       </form>
+
+      <hr>
+      <h2>Examples</h2>
+      {{#each Corpus.examplesController}}
+        <p>
+          {{#link-to 'corpus' id}}{{title}}{{/link-to}} ({{rankings.length}} words)
+        </p>
+      {{/each}}
     </script>
 
     <script type="text/x-handlebars" data-template-name="corpus">
@@ -78,6 +86,14 @@
             {{/each}}
           </tbody>
         </table>
+
+        <h2 id="original-text">The original corpus was:</h2>
+        <p>
+          {{text}}
+        </p>
+
+        <hr>
+        {{#link-to "entry"}}go back{{/link-to}}
 
         {{view Corpus.CorpusView}}
 
@@ -125,6 +141,12 @@
           this.$().append(tag);
         }
       });
+
+      Corpus.examplesController = Ember.ArrayController.create();
+      Ember.$.getJSON("/corpus").then(function(data) {
+        Corpus.examplesController.set('content', data);
+      });
+
 
     </script>
   </body>

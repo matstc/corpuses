@@ -1,8 +1,5 @@
-- use ember
-- update UI with corpus information
+- use coffee on the client side
 - use promises or deferred
 - create a background job to create the corpus (w/ node?)
 - deploy to heroku
-- make UI responsive
-- add color to UI
 - try to use haml
