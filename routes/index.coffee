@@ -44,7 +44,7 @@ exports.create = (req, res) ->
 
   id = Math.floor(Math.random(1) * 10000000)
 
-  db.hset("corp", id, JSON.stringify({id: id, title: title, rankings: tuples, text: text}), redis.print)
+  db.hset("corp", id, JSON.stringify({id: id, title: title, rankings: tuples, text: text}), console.log)
 
   res.render('json', {content: {id: id}})
 
