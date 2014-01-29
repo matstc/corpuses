@@ -1,5 +1,4 @@
-- use coffee on the client side
-- use promises or deferred
-- create a background job to create the corpus (w/ node?)
 - deploy to heroku
+- use promises or deferred
+- use coffee on the client side
 - try to use haml
