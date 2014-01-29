@@ -17,7 +17,7 @@ exports.create = (req, res) ->
 
   tuples = Object.keys(counts).map (key) -> [key, counts[key]]
 
-  tuples = tuples.filter((tuple) -> tuple[1] > 1).sort((one, other) -> one[1] > other[1]).reverse()
+  tuples = tuples.filter((tuple) -> tuple[1] > 1).sort((one, other) -> one[1] - other[1]).reverse()
 
   db = redis.createClient().on "error", (err) ->
     console.log("Error " + err)
