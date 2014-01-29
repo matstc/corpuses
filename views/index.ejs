@@ -1,26 +1,131 @@
 <html>
+
   <head>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <link href="//fonts.googleapis.com/css?family=Luckiest Guy&subset=latin" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Ubuntu&subset=latin" rel="stylesheet" type="text/css">
+
     <link href="/stylesheets/style.css" rel="stylesheet">
+
+    <script src="/javascripts/jquery.js"></script>
+    <script src="/javascripts/handlebars.js"></script>
+    <script src="/javascripts/ember.js"></script>
   </head>
+
   <body>
-    <h1>Welcome to <%= title %></h1>
+    <script type="text/x-handlebars" data-template-name="application">
+      <div class="row">
 
-    <form method="post" action="/corpus">
-      <div>
-        <label>Title</label>
-        <input type="text" name="title" />
-      </div>
+        <div class="col-md-4">
+        </div>
 
-      <div>
-        <label>Text</label>
-        <textarea name="text"></textarea>
-      </div>
+        <div class="col-md-4">
+        {{outlet}}
+        </div>
 
-      <div>
-        <button type="submit">
-          Create Corpus!
-        </button>
+        <div class="col-md-4">
+        </div>
+
       </div>
-    </form>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="entry">
+      <h1>Welcome to <%= title %></h1>
+
+      <p>Want to know the vocabulary words you should learn first? Paste a bunch of text in the box below and we'll tell you.
+      </p>
+
+      <form method="post" action="/corpus" role="form">
+        <div class="form-group">
+          <label>Title</label>
+          {{input class="form-control" value=title}}
+        </div>
+
+        <div class="form-group">
+          <label>Text</label>
+          {{textarea id="corpus-text-entry" class="form-control" value=corpus}}
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-lg" {{action 'create'}}>
+            Create Corpus
+          </button>
+        </div>
+      </form>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="corpus">
+      <h2>Occurrences in {{title}}</h2>
+
+      {{#unless rankings}}
+        <div class="alert alert-danger">Sorry. No words came up more than once. Try again!</div>
+      {{else}}
+        <table id="rankings" class="table table-striped">
+          <thead>
+            <tr>
+              <th width="1%">#</th>
+              <th>Word</th>
+              <th width="5%">Occurrences</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each ranking in rankings}}
+              <tr>
+                <td class="ranking"></td>
+                <td>{{ranking.firstObject}}</td>
+                <td>{{ranking.lastObject}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+
+        {{view Corpus.CorpusView}}
+
+      {{/unless}}
+    </script>
+
+    <script language="javascript">
+      window.Corpus = Ember.Application.create();
+
+      Corpus.Router.map(function() {
+        this.route('entry', { path: '/' });
+        this.route('corpus', {path: '/corpus/:id'});
+      });
+
+      Corpus.EntryController = Ember.ObjectController.extend({
+        title: "",
+        corpus: "",
+        actions: {
+          create: function(){
+            var controller = this;
+
+            var success = function(data){
+              console.log(data);
+              controller.transitionToRoute('/corpus/' + JSON.parse(data).id);
+            }
+
+            $.post("/corpus", {title: controller.title, text: controller.corpus}).done(success);
+          }
+        }
+      });
+
+      Corpus.CorpusRoute = Ember.Route.extend({
+        model: function(params) {
+          return Ember.$.getJSON("/corpus/" + params.id).then(function(data) {return data;});
+        }
+      });
+
+      Corpus.CorpusController = Ember.ObjectController.extend({
+      });
+
+      Corpus.CorpusView = Ember.View.extend({
+        didInsertElement: function(){
+          var tag = $(document.createElement('script'));
+          tag.html("$('table#rankings tbody tr').each(function(index){ $(this).find('td:first-child').html(index+1); });");
+          this.$().append(tag);
+        }
+      });
+
+    </script>
   </body>
 </html>

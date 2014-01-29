@@ -24,9 +24,9 @@ exports.create = (req, res) ->
 
   id = Math.floor(Math.random(1) * 10000000)
 
-  db.set(id, JSON.stringify({id: id, title: title, tuples: tuples}), redis.print)
+  db.set(id, JSON.stringify({id: id, title: title, rankings: tuples}), redis.print)
 
-  res.render('json', {content: JSON.stringify({id: id, corpus: tuples})})
+  res.render('json', {content: {id: id}})
 
 
 exports.show = (req, res) ->
