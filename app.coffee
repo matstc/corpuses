@@ -3,7 +3,6 @@ routes = require('./routes')
 http = require('http')
 path = require('path')
 sass = require('node-sass')
-redis = require('redis')
 app = express()
 
 app.set('port', process.env.PORT || 3000)

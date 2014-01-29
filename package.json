@@ -11,6 +11,8 @@
     "node-sass": "*",
     "redis": "*",
     "underscore": "*",
-    "coffee-script": "*"
+    "coffee-script": "*",
+    "redis-url": "~0.2.0",
+    "url": "*"
   }
 }

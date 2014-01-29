@@ -1,12 +1,20 @@
-redis = require "redis" 
 _ = require "underscore"
+
+getDb = ->
+  if process.env.REDISTOGO_URL
+    rtg = require("url").parse(process.env.REDISTOGO_URL)
+    db = require("redis").createClient(rtg.port, rtg.hostname)
+    db.auth(rtg.auth.split(":")[1])
+  else
+    db = require("redis").createClient()
+  db.on "error", console.log
+  db
 
 exports.index = (req, res) ->
   res.render('index', { title: 'Corpuses'})
 
 exports.list = (req, res) ->
-  db = redis.createClient()
-  db.on "error", console.log
+  db = getDb()
    
   db.hkeys 'corp', (err, reply) ->
     multi = db.multi()
@@ -32,8 +40,7 @@ exports.create = (req, res) ->
 
   tuples = tuples.filter((tuple) -> tuple[1] > 1).sort((one, other) -> one[1] - other[1]).reverse()
 
-  db = redis.createClient()
-  db.on "error", console.log
+  db = getDb()
 
   id = Math.floor(Math.random(1) * 10000000)
 
@@ -44,8 +51,7 @@ exports.create = (req, res) ->
 exports.show = (req, res) ->
   id = req.param("id")
 
-  db = redis.createClient()
-  db.on "error", console.log
+  db = getDb()
    
   db.hget "corp", id, (err, reply) ->
     res.render('json', {content: JSON.parse(reply), err: err})
