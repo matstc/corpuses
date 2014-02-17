@@ -1,4 +1,3 @@
-- deploy to heroku
 - use promises or deferred
 - use coffee on the client side
 - try to use haml
